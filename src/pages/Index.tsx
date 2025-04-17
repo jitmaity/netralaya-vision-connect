@@ -8,6 +8,20 @@ import { LocationsSection } from "@/components/sections/locations-section";
 import { AppointmentSection } from "@/components/sections/appointment-section";
 import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
+import { motion } from "framer-motion";
+
+const RevealOnScroll = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 const Index = () => {
   return (
@@ -15,12 +29,24 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         <HeroSection />
-        <ServicesSection />
-        <DoctorSection />
-        <LocationsSection />
-        <AppointmentSection />
-        <AboutSection />
-        <ContactSection />
+        <RevealOnScroll>
+          <ServicesSection />
+        </RevealOnScroll>
+        <RevealOnScroll>
+          <DoctorSection />
+        </RevealOnScroll>
+        <RevealOnScroll>
+          <LocationsSection />
+        </RevealOnScroll>
+        <RevealOnScroll>
+          <AppointmentSection />
+        </RevealOnScroll>
+        <RevealOnScroll>
+          <AboutSection />
+        </RevealOnScroll>
+        <RevealOnScroll>
+          <ContactSection />
+        </RevealOnScroll>
       </main>
       <Footer />
     </div>
@@ -28,3 +54,4 @@ const Index = () => {
 };
 
 export default Index;
+
