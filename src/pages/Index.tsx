@@ -4,6 +4,7 @@ import { Footer } from "@/components/footer";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ServicesSection } from "@/components/sections/services-section";
 import { DoctorSection } from "@/components/sections/doctor-section";
+import { ServiceShowcase } from "@/components/sections/service-showcase";
 import { LocationsSection } from "@/components/sections/locations-section";
 import { AppointmentSection } from "@/components/sections/appointment-section";
 import { AboutSection } from "@/components/sections/about-section";
@@ -36,6 +37,9 @@ const Index = () => {
           <DoctorSection />
         </RevealOnScroll>
         <RevealOnScroll>
+          <ServiceShowcase />
+        </RevealOnScroll>
+        <RevealOnScroll>
           <LocationsSection />
         </RevealOnScroll>
         <RevealOnScroll>
@@ -54,4 +58,3 @@ const Index = () => {
 };
 
 export default Index;
-
