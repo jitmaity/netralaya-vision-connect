@@ -1,6 +1,4 @@
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 
 type ServiceItem = {
@@ -33,73 +31,32 @@ const serviceItems: ServiceItem[] = [
 ];
 
 export function ServiceShowcase() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"] // Adjusted trigger points
-  });
-
-  const x = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    ["0%", "-50%", "-100%"]
-  );
-
   return (
-    <section 
-      ref={containerRef}
-      className="relative h-[80vh] overflow-hidden bg-muted/30"
-    >
-      <div className="sticky top-[20vh] h-[60vh] flex items-center overflow-hidden">
-        <div className="container mx-auto">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-8 heading-gradient"
-          >
-            Our Services in Action
-          </motion.h2>
+    <section className="relative bg-muted/30 section-padding">
+      <div className="container mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 heading-gradient">
+          Our Services in Action
+        </h2>
 
-          <motion.div 
-            style={{ x }}
-            className="flex gap-6 pl-[10%]"
-          >
-            {serviceItems.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="min-w-[300px] md:min-w-[400px]"
-              >
-                <Card className="glass-card overflow-hidden h-full">
-                  <div className="aspect-video relative">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-xl mb-3">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Scroll Progress Indicator */}
-          <motion.div 
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 w-64 h-1 bg-muted rounded-full overflow-hidden"
-          >
-            <motion.div 
-              className="h-full bg-primary rounded-full"
-              style={{ scaleX: scrollYProgress }}
-              transition={{ duration: 0.1 }}
-            />
-          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {serviceItems.map((item, index) => (
+            <Card 
+              key={index} 
+              className="glass-card overflow-hidden h-full transform transition-all duration-300 hover:scale-[1.02]"
+            >
+              <div className="aspect-video relative">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-xl mb-3">{item.title}</h3>
+                <p className="text-muted-foreground">{item.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
