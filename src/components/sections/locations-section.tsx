@@ -1,8 +1,10 @@
+
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Clock } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Location = {
   name: string;
@@ -59,7 +61,7 @@ export function LocationsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"]
+    offset: ["start end", "end start"]
   });
 
   const x = useTransform(
@@ -72,16 +74,16 @@ export function LocationsSection() {
     <section 
       id="locations" 
       ref={containerRef}
-      className="relative h-[100vh] overflow-hidden bg-black text-white"
+      className="relative h-[100vh] overflow-hidden bg-[#131519]"
     >
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="container mx-auto">
-          <div className="text-center mb-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-3xl md:text-4xl font-bold mb-4"
+              className="text-4xl font-bold mb-4 text-white"
             >
               Locations & Hours
             </motion.h2>
@@ -89,9 +91,9 @@ export function LocationsSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-gray-300 max-w-2xl mx-auto"
+              className="text-gray-400 max-w-2xl mx-auto"
             >
-              Visit us at one of our convenient locations across Kolkata. Each clinic is equipped with state-of-the-art technology for comprehensive eye care
+              Visit us at any of our convenient locations across Kolkata. Each clinic is equipped with state-of-the-art technology for comprehensive eye care.
             </motion.p>
           </div>
 
@@ -107,37 +109,41 @@ export function LocationsSection() {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 className="min-w-[100%] px-4"
               >
-                <Card className="bg-gray-900/50 border-purple-500/20 backdrop-blur-sm p-6 rounded-xl">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-purple-400 mt-1" />
-                      <div>
-                        <h3 className="text-xl font-semibold text-white mb-1">{location.name}</h3>
-                        <p className="text-gray-400">{location.address}</p>
+                <Card className="bg-[#1a1d23]/50 border-purple-500/20 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-start gap-3">
+                        <MapPin className="h-5 w-5 text-purple-400 mt-1" />
+                        <div>
+                          <h3 className="text-xl font-semibold text-white mb-1">{location.name}</h3>
+                          <p className="text-gray-400">{location.address}</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-center gap-2 mt-2">
-                      <Clock className="h-4 w-4 text-purple-400" />
-                      <span className="font-medium text-white">Operating Hours</span>
-                    </div>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Clock className="h-4 w-4 text-purple-400" />
+                        <span className="font-medium text-white">Operating Hours</span>
+                      </div>
 
-                    <Table>
-                      <TableBody>
-                        {location.hours.map((schedule, idx) => (
-                          <TableRow 
-                            key={idx} 
-                            className={`border-b border-gray-800 ${
-                              schedule.time === "Closed" ? "text-gray-500" : "text-gray-300"
-                            }`}
-                          >
-                            <TableCell className="py-2 pl-0 font-medium">{schedule.day}</TableCell>
-                            <TableCell className="py-2">{schedule.time}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                      <ScrollArea className="h-[200px] w-full rounded-md">
+                        <Table>
+                          <TableBody>
+                            {location.hours.map((schedule, idx) => (
+                              <TableRow 
+                                key={idx} 
+                                className={`border-b border-gray-800 ${
+                                  schedule.time === "Closed" ? "text-gray-500" : "text-gray-300"
+                                }`}
+                              >
+                                <TableCell className="py-2 pl-0 font-medium">{schedule.day}</TableCell>
+                                <TableCell className="py-2">{schedule.time}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </ScrollArea>
+                    </div>
+                  </CardContent>
                 </Card>
               </motion.div>
             ))}
