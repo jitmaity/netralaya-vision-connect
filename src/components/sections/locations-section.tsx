@@ -1,4 +1,5 @@
-
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Clock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -55,44 +56,103 @@ const locations: Location[] = [
 ];
 
 export function LocationsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", `-${(locations.length - 1) * 100}%`]
+  );
+
   return (
-    <section id="locations" className="section-padding bg-muted/50">
-      <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 heading-gradient">Locations & Hours</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Visit us at one of our convenient locations across Kolkata. Each clinic is equipped with state-of-the-art technology for comprehensive eye care
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {locations.map((location, index) => (
-            <Card key={index} className="border border-border/50 hover:shadow-md transition-shadow">
-              <CardHeader className="pb-2">
-                <div className="flex items-center gap-3 mb-2">
-                  <MapPin className="h-5 w-5 text-eyepurple" />
-                  <CardTitle className="text-xl">{location.name}</CardTitle>
-                </div>
-                <CardDescription className="text-base">{location.address}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="h-4 w-4 text-eyepurple" />
-                  <span className="font-medium">Operating Hours</span>
-                </div>
-                <Table>
-                  <TableBody>
-                    {location.hours.map((schedule, idx) => (
-                      <TableRow key={idx} className={schedule.time === "Closed" ? "text-muted-foreground" : ""}>
-                        <TableCell className="font-medium">{schedule.day}</TableCell>
-                        <TableCell>{schedule.time}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          ))}
+    <section 
+      id="locations" 
+      ref={containerRef}
+      className="relative h-[100vh] overflow-hidden bg-black text-white"
+    >
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        <div className="container mx-auto">
+          <div className="text-center mb-8">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl md:text-4xl font-bold mb-4"
+            >
+              Locations & Hours
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-gray-300 max-w-2xl mx-auto"
+            >
+              Visit us at one of our convenient locations across Kolkata. Each clinic is equipped with state-of-the-art technology for comprehensive eye care
+            </motion.p>
+          </div>
+
+          <motion.div 
+            style={{ x }}
+            className="flex gap-8"
+          >
+            {locations.map((location, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="min-w-[100%] px-4"
+              >
+                <Card className="bg-gray-900/50 border-purple-500/20 backdrop-blur-sm p-6 rounded-xl">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-5 w-5 text-purple-400 mt-1" />
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-1">{location.name}</h3>
+                        <p className="text-gray-400">{location.address}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-2">
+                      <Clock className="h-4 w-4 text-purple-400" />
+                      <span className="font-medium text-white">Operating Hours</span>
+                    </div>
+
+                    <Table>
+                      <TableBody>
+                        {location.hours.map((schedule, idx) => (
+                          <TableRow 
+                            key={idx} 
+                            className={`border-b border-gray-800 ${
+                              schedule.time === "Closed" ? "text-gray-500" : "text-gray-300"
+                            }`}
+                          >
+                            <TableCell className="py-2 pl-0 font-medium">{schedule.day}</TableCell>
+                            <TableCell className="py-2">{schedule.time}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Scroll Progress Indicator */}
+          <motion.div 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 w-64 h-1 bg-gray-800 rounded-full overflow-hidden"
+          >
+            <motion.div 
+              className="h-full bg-purple-500 rounded-full"
+              style={{ scaleX: scrollYProgress }}
+              transition={{ duration: 0.1 }}
+            />
+          </motion.div>
         </div>
       </div>
     </section>

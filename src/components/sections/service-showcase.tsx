@@ -36,7 +36,7 @@ export function ServiceShowcase() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start center", "end center"] // Adjusted trigger points
   });
 
   const x = useTransform(
@@ -48,15 +48,15 @@ export function ServiceShowcase() {
   return (
     <section 
       ref={containerRef}
-      className="relative h-[100vh] overflow-hidden bg-muted/30"
+      className="relative h-[80vh] overflow-hidden bg-muted/30"
     >
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+      <div className="sticky top-[20vh] h-[60vh] flex items-center overflow-hidden">
         <div className="container mx-auto">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 heading-gradient"
+            className="text-3xl md:text-4xl font-bold text-center mb-8 heading-gradient"
           >
             Our Services in Action
           </motion.h2>
